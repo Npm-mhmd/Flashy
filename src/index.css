@@ -1,0 +1,74 @@
+:root {
+  --paper:      #faf8f0;
+  --paper-dark: #f0ede0;
+  --ink:        #1a1a2e;
+  --ink-light:  #4a4a6a;
+  --ink-faint:  #8a8aaa;
+  --red:        #e63946;
+  --blue:       #457b9d;
+  --green:      #2d6a4f;
+  --yellow:     #f4a261;
+
+  --sketch-shadow:    3px 3px 0 #1a1a2e;
+  --sketch-shadow-lg: 5px 5px 0 #1a1a2e;
+  --sketch-border:    2px solid #1a1a2e;
+
+  --font-hand:  'Caveat', cursive;
+  --font-brush: 'Caveat Brush', cursive;
+
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 27px,
+    rgba(180, 180, 220, 0.13) 27px,
+    rgba(180, 180, 220, 0.13) 28px
+  );
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-brush);
+  color: var(--ink);
+  margin: 0;
+}
+
+h1 { font-size: 2.2rem; }
+h2 { font-size: 1.7rem; }
+
+p { margin: 0; }
+
+button {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  :root { font-size: 16px; }
+  h1 { font-size: 1.9rem; }
+  h2 { font-size: 1.5rem; }
+}
+
+@media (max-width: 380px) {
+  :root { font-size: 15px; }
+}
