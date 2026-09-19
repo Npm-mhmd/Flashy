@@ -12,7 +12,6 @@ export default function App() {
         <Link to="/" className="nav-logo">Flashy</Link>
         <div className="nav-links">
           <Link to="/" className="nav-link">Dashboard</Link>
-          <Link to="/new-deck" className="nav-link btn-primary">Decks</Link>
         </div>
       </nav>
 
