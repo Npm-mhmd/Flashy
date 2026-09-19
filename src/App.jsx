@@ -11,7 +11,7 @@ export default function App() {
       <nav className="navbar">
         <Link to="/" className="nav-logo">Flashy</Link>
         <div className="nav-links">
-          <Link to="/" className="nav-link">Dashboard</Link>
+          <Link to="/" className="nav-link btn-primary">Dashboard</Link>
         </div>
       </nav>
 
