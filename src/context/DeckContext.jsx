@@ -6,16 +6,8 @@ export function DeckProvider({ children }) {
   const [decks, setDecks] = useState(() => {
     const saved = localStorage.getItem('flashcard-decks');
     if (saved) return JSON.parse(saved);
-    return [
-      {
-        id: 1,
-        title: 'Bac Informatique Prep',
-        cards: [
-          { id: 101, front: 'Write a Python function to check if a string is a palindrome.', back: 'def is_palindrome(s):\n    return s == s[::-1]', nextReview: new Date().toISOString() },
-          { id: 102, front: 'How do you declare an array of 10 integers in C++?', back: 'int myArray[10];', nextReview: new Date().toISOString() },
-        ],
-      },
-    ];
+    
+    return []; 
   });
 
   useEffect(() => {
