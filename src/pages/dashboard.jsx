@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useDecks } from '../context/DeckContext';
+import { useDecks } from '../context/useDecks';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -50,18 +50,21 @@ export default function Dashboard() {
               <div key={deck.id} className={`deck-card ${i % 2 === 0 ? 'tilt-left' : 'tilt-right'}`}>
                 <div className="deck-card-top">
                   <h2>{deck.title}</h2>
-                  <span className="deck-total">{deck.cards.length} cards</span>
+                  <span className="deck-total">{deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}</span>
                 </div>
                 <div className="deck-card-stats">
                   <span className="stat-pill stat-mastered">{masteredCount} mastered</span>
                   <span className={`stat-pill ${dueCount > 0 ? 'stat-due' : 'stat-done'}`}>
-                    {dueCount > 0 ? `${dueCount} due` : 'all done'}
+                    {deck.cards.length === 0 ? 'empty deck' : dueCount > 0 ? `${dueCount} due` : 'all done'}
                   </span>
                 </div>
                 <div className="deck-card-actions">
                   <Link to={`/create?deckId=${deck.id}`} className="deck-action-btn btn-outline">Add Cards</Link>
-                  <Link to={`/study/${deck.id}`} className={`deck-action-btn ${dueCount > 0 ? 'btn-solid' : 'btn-muted'}`}>
-                    {dueCount > 0 ? 'Study' : 'Review'}
+                  <Link
+                    to={deck.cards.length === 0 ? `/create?deckId=${deck.id}` : `/study/${deck.id}`}
+                    className={`deck-action-btn ${dueCount > 0 ? 'btn-solid' : 'btn-muted'}`}
+                  >
+                    {deck.cards.length === 0 ? 'Start Deck' : dueCount > 0 ? 'Study' : 'Review'}
                   </Link>
                 </div>
               </div>

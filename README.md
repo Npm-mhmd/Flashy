@@ -1,16 +1,20 @@
 # Flashy
 
 A sketchy-designed flashcard app built with React. Study smarter using spaced repetition — cards you struggle with come back sooner, cards you know well are pushed further out.
-
+## Demo 
+To see a demo of Flashy, visit [flashy](https://flashyco.netlify.app).
 ## Features
 
 - **Deck management** — create, rename, and delete decks
 - **Card creation** — add cards to any deck with a live flip preview as you type
+- **File import** — bulk add cards from CSV or text files with common or custom separators
 - **Spaced repetition** — rate each card as Again / Hard / Good / Easy after each review
 - **Study sessions** — cards are queued by due date; the session is frozen on start so rating a card mid-session never breaks the queue
 - **Session summary** — a completion modal shows your rating breakdown when you finish
 - **Keyboard shortcuts** — `Space` to flip, `1–4` to rate
 - **Persistent storage** — all decks and cards are saved to `localStorage`
+- **Accessible controls** — flip cards and previews work with touch, mouse, or keyboard
+- **Resilient data** — invalid saved data is recovered safely and IDs remain collision-free
 - **Sketchy design** — hand-drawn aesthetic using Caveat and Caveat Brush fonts with offset shadows and ruled-paper background
 
 ## Tech Stack
@@ -38,7 +42,8 @@ src/
 │   ├── FlashCard.jsx       # Flip card component (controlled)
 │   └── FlashCard.css
 ├── context/
-│   └── DeckContext.jsx     # Global state + localStorage persistence
+│   ├── DeckContext.jsx     # Global state + localStorage persistence
+│   └── useDecks.js         # Shared context and consumer hook
 ├── pages/
 │   ├── dashboard.jsx       # Deck overview with stats
 │   ├── Dashboard.css

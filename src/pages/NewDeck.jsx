@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDecks } from '../context/DeckContext';
+import { useDecks } from '../context/useDecks';
 import './CreateDeck.css';
 
 export default function NewDeck() {
@@ -38,11 +38,12 @@ export default function NewDeck() {
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="e.g. Biology Chapter 3, French Vocab..."
+            maxLength={80}
             required
             autoFocus
           />
         </div>
-        <button type="submit" className="submit-btn">Create Deck</button>
+        <button type="submit" className="submit-btn" disabled={!title.trim()}>Create Deck</button>
       </form>
 
       {decks.length > 0 && (
@@ -56,6 +57,7 @@ export default function NewDeck() {
                     className="rename-input"
                     value={renameVal}
                     onChange={e => setRenameVal(e.target.value)}
+                    maxLength={80}
                     onBlur={() => commitRename(deck.id)}
                     onKeyDown={e => {
                       if (e.key === 'Enter')  commitRename(deck.id);
@@ -69,10 +71,10 @@ export default function NewDeck() {
                   </span>
                 )}
                 <div className="deck-list-actions">
-                  <span className="deck-list-count">{deck.cards.length} cards</span>
-                  <button className="btn-rename"  onClick={() => startRename(deck)}>Rename</button>
-                  <button className="btn-add-to"  onClick={() => navigate(`/create?deckId=${deck.id}`)}>Add Cards</button>
-                  <button className="btn-delete"  onClick={() => handleDelete(deck)}>Delete</button>
+                  <span className="deck-list-count">{deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}</span>
+                  <button type="button" className="btn-rename" onClick={() => startRename(deck)}>Rename</button>
+                  <button type="button" className="btn-add-to" onClick={() => navigate(`/create?deckId=${deck.id}`)}>Add Cards</button>
+                  <button type="button" className="btn-delete" onClick={() => handleDelete(deck)} aria-label={`Delete ${deck.title}`}>Delete</button>
                 </div>
               </li>
             ))}

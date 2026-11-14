@@ -50,6 +50,13 @@
   background: rgba(26, 26, 46, 0.07);
 }
 
+.nav-link.active:not(.btn-primary) {
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
 .btn-primary {
   background: var(--ink);
   color: var(--paper) !important;
@@ -70,6 +77,27 @@
   flex: 1;
   padding: 2rem;
 }
+
+.not-found {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.not-found-code {
+  font-family: var(--font-brush);
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--red);
+  transform: rotate(-3deg);
+}
+
+.not-found > p:not(.not-found-code) { color: var(--ink-faint); }
+.not-found .new-deck-btn { margin-top: 0.75rem; }
 
 /* ── Responsive ── */
 @media (max-width: 480px) {

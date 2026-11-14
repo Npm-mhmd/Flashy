@@ -63,6 +63,25 @@ button {
   cursor: pointer;
 }
 
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--ink);
+  background: rgba(244, 162, 97, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media (max-width: 600px) {
   :root { font-size: 16px; }
   h1 { font-size: 1.9rem; }

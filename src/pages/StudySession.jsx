@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDecks } from '../context/DeckContext';
+import { useDecks } from '../context/useDecks';
 import FlashCard from '../components/FlashCard';
 import './StudySession.css';
 
@@ -9,19 +9,17 @@ export default function StudySession() {
   const navigate   = useNavigate();
   const { decks, updateCard } = useDecks();
 
-  const deck = decks.find(d => d.id === parseInt(deckId));
+  const deck = decks.find(d => String(d.id) === deckId);
 
-  const queueRef = useRef(null);
-  if (queueRef.current === null && deck) {
+  const [queue, setQueue] = useState(() => {
+    if (!deck) return [];
     const now = new Date();
-    queueRef.current = deck.cards.filter(c => new Date(c.nextReview) <= now);
-  }
-
-  const [queue, setQueue]               = useState(() => queueRef.current || []);
+    return deck.cards.filter(c => new Date(c.nextReview) <= now);
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped]       = useState(false);
   const [done, setDone]                 = useState(false);
-  const [ratings, setRatings]           = useState({ hard: 0, good: 0, easy: 0 });
+  const [ratings, setRatings]           = useState({ again: 0, hard: 0, good: 0, easy: 0 });
 
   const activeCard = queue[currentIndex];
 
@@ -44,8 +42,10 @@ export default function StudySession() {
   }, [activeCard, deck, updateCard, advance]);
 
   const handleAgain = useCallback(() => {
+    if (!activeCard) return;
     const newQueue = [...queue, activeCard];
     setQueue(newQueue);
+    setRatings(r => ({ ...r, again: r.again + 1 }));
     advance(newQueue);
   }, [queue, activeCard, advance]);
 
@@ -54,6 +54,7 @@ export default function StudySession() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+      if (done) return;
       if (e.code === 'Space') { e.preventDefault(); handleFlip(); }
       if (!isFlipped) return;
       if (e.key === '1') handleAgain();
@@ -63,7 +64,7 @@ export default function StudySession() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isFlipped, handleFlip, handleAgain, handleFeedback]);
+  }, [done, isFlipped, handleFlip, handleAgain, handleFeedback]);
 
   if (!deck) return <p className="state-msg">Deck not found.</p>;
 
@@ -78,19 +79,19 @@ export default function StudySession() {
     </div>
   );
 
-  const progress   = (currentIndex / queue.length) * 100;
-  const totalRated = ratings.hard + ratings.good + ratings.easy;
+  const progress = done ? 100 : (currentIndex / queue.length) * 100;
+  const totalRated = ratings.again + ratings.hard + ratings.good + ratings.easy;
 
   return (
     <div className="study-container">
       {done && (
-        <div className="completion-overlay">
+        <div className="completion-overlay" role="dialog" aria-modal="true" aria-labelledby="completion-title">
           <div className="completion-modal">
-            <h2>Session Complete</h2>
+            <h2 id="completion-title">Session Complete</h2>
             <p>You reviewed <strong>{totalRated}</strong> card{totalRated !== 1 ? 's' : ''} in <em>{deck.title}</em>.</p>
             {totalRated > 0 && (
               <div className="rating-summary">
-                <span className="rs-again">Again {queue.length - totalRated}</span>
+                <span className="rs-again">Again {ratings.again}</span>
                 <span className="rs-hard">Hard {ratings.hard}</span>
                 <span className="rs-good">Good {ratings.good}</span>
                 <span className="rs-easy">Easy {ratings.easy}</span>
@@ -106,7 +107,14 @@ export default function StudySession() {
         <p className="card-count">{queue.length - currentIndex} / {queue.length} remaining</p>
       </div>
 
-      <div className="progress-bar-track">
+        <div
+          className="progress-bar-track"
+          role="progressbar"
+          aria-label="Study progress"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={Math.round(progress)}
+        >
         <div className="progress-bar-fill" style={{ width: `${progress}%` }} />
       </div>
 
